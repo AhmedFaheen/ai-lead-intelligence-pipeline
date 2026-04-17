@@ -1,0 +1,832 @@
+{
+  "name": "AI Lead Intelligence Pipeline",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "2b44511d-b03e-4212-aa02-46003ca2aded",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1mTpCNcBbd-guVI2oBCYt199AoV1HRM5tcUzwfjHqLZI",
+          "mode": "list",
+          "cachedResultName": "Lead Data",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1mTpCNcBbd-guVI2oBCYt199AoV1HRM5tcUzwfjHqLZI/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1mTpCNcBbd-guVI2oBCYt199AoV1HRM5tcUzwfjHqLZI/edit#gid=0"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        208,
+        0
+      ],
+      "id": "82035759-ae27-4864-896f-fcb3ac9905db",
+      "name": "Get row(s) in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "ptPhKUlBJsjf5uCO",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const seen = new Set();\n\nreturn items.map(item => {\n  const key = item.json.website;\n\n  if (seen.has(key)) {\n    item.json.is_duplicate = true;\n  } else {\n    seen.add(key);\n    item.json.is_duplicate = false;\n  }\n\n  return item;\n});"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        400,
+        96
+      ],
+      "id": "04d545ba-7055-436a-8a13-678df82363a1",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "96f8bcea-0a0b-4f54-9f33-ebe927cfc036",
+              "leftValue": "={{$json[\"is_duplicate\"]}}",
+              "rightValue": "true",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        880,
+        -96
+      ],
+      "id": "9c710e8e-9492-44a6-988e-3cc9af75243d",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1mTpCNcBbd-guVI2oBCYt199AoV1HRM5tcUzwfjHqLZI",
+          "mode": "list",
+          "cachedResultName": "Lead Data",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1mTpCNcBbd-guVI2oBCYt199AoV1HRM5tcUzwfjHqLZI/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1279160720,
+          "mode": "list",
+          "cachedResultName": "Invalid Leads",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1mTpCNcBbd-guVI2oBCYt199AoV1HRM5tcUzwfjHqLZI/edit#gid=1279160720"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "company": "={{$json[\"company\"]}}",
+            "website": "={{$json[\"website\"]}}",
+            "contact_name": "={{$json[\"contact_name\"]}}",
+            "role": "={{$json[\"role\"]}}",
+            "notes": "={{$json[\"notes\"]}}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "company",
+              "displayName": "company",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "website",
+              "displayName": "website",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "contact_name",
+              "displayName": "contact_name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "role",
+              "displayName": "role",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "notes",
+              "displayName": "notes",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        1376,
+        16
+      ],
+      "id": "9053d4bf-eb10-4e06-a5d2-19566fc186da",
+      "name": "Append row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "Mq2gN3gL2J5Qspip",
+          "name": "Google Sheets OAuth2 API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "={{$json[\"website\"]}}",
+        "options": {
+          "response": {
+            "response": {
+              "neverError": true,
+              "responseFormat": "text"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        1040,
+        320
+      ],
+      "id": "6f0aa9e7-4769-4c12-a90a-bdb5ada56719",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=You are an AI lead scoring and sales intelligence assistant.\n\nAnalyze the following lead using all available information, including website context.\n\nLead Information:\nCompany: {{$json[\"company\"]}}\nWebsite: {{$json[\"website\"]}}\nContact Name: {{$json[\"contact_name\"]}}\nRole: {{$json[\"role\"]}}\nNotes: {{$json[\"notes\"]}}\n\nWebsite Context:\nTitle: {{$json[\"website_title\"]}}\nDescription: {{$json[\"website_description\"]}}\n\nInstructions:\n- Evaluate how likely this lead is to convert (score 1–100)\n- Consider company relevance, role seniority, and intent signals from notes and website\n- Infer missing details if needed\n- Keep outputs concise and practical for sales outreach\n\nReturn ONLY valid JSON (no markdown, no explanations, no extra text):\n\n{\n  \"lead_score\": number,\n  \"confidence_score\": number (0-1),\n  \"rationale\": \"short explanation of scoring\",\n  \"value_proposition\": \"specific value tailored to this company\",\n  \"opening_line\": \"personalized outreach opener\",\n  \"objection_prediction\": \"likely objection from this lead\",\n  \"next_best_action\": \"recommended next step\"\n}",
+        "batching": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.9,
+      "position": [
+        1520,
+        336
+      ],
+      "id": "e22c1a60-ff70-431b-a5d4-e7b7cbd3cfb1",
+      "name": "Basic LLM Chain"
+    },
+    {
+      "parameters": {
+        "model": "llama-3.3-70b-versatile",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
+      "typeVersion": 1,
+      "position": [
+        1312,
+        576
+      ],
+      "id": "7ba65fc6-e4bc-4f51-ad8f-7b5ced3bae2d",
+      "name": "Groq Chat Model",
+      "credentials": {
+        "groqApi": {
+          "id": "nN7DXk7GIVwwQgke",
+          "name": "Groq account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "ea1c419b-5c6d-4d62-9957-10aceecc4638",
+              "leftValue": "={{$json.company}}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "c3bade7e-2789-4d28-a8dd-0f5dc6d737d7",
+              "leftValue": "={{$json.website}}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        640,
+        96
+      ],
+      "id": "c5282cd9-5178-4892-af18-3bfcbf84362c",
+      "name": "If1"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1mTpCNcBbd-guVI2oBCYt199AoV1HRM5tcUzwfjHqLZI",
+          "mode": "list",
+          "cachedResultName": "Lead Data",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1mTpCNcBbd-guVI2oBCYt199AoV1HRM5tcUzwfjHqLZI/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 767051479,
+          "mode": "list",
+          "cachedResultName": "Duplicates",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1mTpCNcBbd-guVI2oBCYt199AoV1HRM5tcUzwfjHqLZI/edit#gid=767051479"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "company": "={{$json[\"company\"]}}",
+            "website": "={{$json[\"website\"]}}",
+            "contact_name": "={{$json[\"contact_name\"]}}",
+            "role": "={{$json[\"role\"]}}",
+            "notes": "={{$json[\"notes\"]}}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "company",
+              "displayName": "company",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "website",
+              "displayName": "website",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "contact_name",
+              "displayName": "contact_name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "role",
+              "displayName": "role",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "notes",
+              "displayName": "notes",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        1312,
+        -240
+      ],
+      "id": "934fdcc1-78e0-45a9-a6f7-44d94e334bd9",
+      "name": "Append row in sheet1",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "Mq2gN3gL2J5Qspip",
+          "name": "Google Sheets OAuth2 API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1mTpCNcBbd-guVI2oBCYt199AoV1HRM5tcUzwfjHqLZI",
+          "mode": "list",
+          "cachedResultName": "Lead Data",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1mTpCNcBbd-guVI2oBCYt199AoV1HRM5tcUzwfjHqLZI/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1427878970,
+          "mode": "list",
+          "cachedResultName": "FINAL sheet",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1mTpCNcBbd-guVI2oBCYt199AoV1HRM5tcUzwfjHqLZI/edit#gid=1427878970"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "company": "={{$json[\"company\"]}}",
+            "website": "={{$json[\"website\"]}}",
+            "contact_name": "={{$json[\"contact_name\"]}}",
+            "role": "={{$json[\"role\"]}}",
+            "notes": "={{$json[\"notes\"]}}",
+            "lead_score": "={{$json[\"lead_score\"]}}",
+            "confidence_score": "={{$json[\"confidence_score\"]}}",
+            "rationale": "={{$json[\"rationale\"]}}",
+            "value_proposition": "={{$json[\"value_proposition\"]}}",
+            "opening_line": "={{$json[\"opening_line\"]}}",
+            "objection_prediction": "={{$json[\"objection_prediction\"]}}",
+            "next_best_action": "={{$json[\"next_best_action\"]}}",
+            "source": "={{$json[\"source\"]}}",
+            "timestamp": "={{$now}}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "company",
+              "displayName": "company",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "website",
+              "displayName": "website",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "contact_name",
+              "displayName": "contact_name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "role",
+              "displayName": "role",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "notes",
+              "displayName": "notes",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "lead_score",
+              "displayName": "lead_score",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "confidence_score",
+              "displayName": "confidence_score",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "rationale",
+              "displayName": "rationale",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "value_proposition",
+              "displayName": "value_proposition",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "opening_line",
+              "displayName": "opening_line",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "objection_prediction",
+              "displayName": "objection_prediction",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "next_best_action",
+              "displayName": "next_best_action",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "source",
+              "displayName": "source",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "timestamp",
+              "displayName": "timestamp",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        2336,
+        320
+      ],
+      "id": "d0e5a5fa-43ee-46d6-bf99-bd3f34d0e07b",
+      "name": "Append row in sheet2",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "Mq2gN3gL2J5Qspip",
+          "name": "Google Sheets OAuth2 API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "return items.map(item => {\n\n  let text = item.json.text;\n\n  text = text.replace(/```json/g, \"\").replace(/```/g, \"\").trim();\n\n  let data = {};\n  try {\n    data = JSON.parse(text);\n  } catch (e) {}\n\n  return {\n    json: {\n      ...item.json,\n      ...data\n    }\n  };\n});"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2016,
+        480
+      ],
+      "id": "6733757a-0ce3-4ea5-ac87-32acd4c381e1",
+      "name": "Code in JavaScript1"
+    },
+    {
+      "parameters": {
+        "jsCode": "return items.map(item => {\n\n  const html = item.json.data || \"\";\n\n  // extract title\n  const titleMatch = html.match(/<title[^>]*>([^<]*)<\\/title>/i);\n  const title = titleMatch ? titleMatch[1].trim() : \"\";\n\n  // extract meta description\n  const metaMatch =\n    html.match(/<meta\\s+(?:name|property)=[\"']description[\"']\\s+content=[\"']([^\"']+)[\"']/i) ||\n    html.match(/<meta\\s+content=[\"']([^\"']+)[\"']\\s+(?:name|property)=[\"']description[\"']/i);\n\n  const description = metaMatch ? metaMatch[1].trim() : \"\";\n\n  return {\n    json: {\n      ...item.json, // ✅ THIS IS THE KEY FIX\n      website_title: title,\n      website_description: description\n    }\n  };\n});"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1248,
+        320
+      ],
+      "id": "5c147414-7215-4275-bc59-d7ff014e23de",
+      "name": "Code in JavaScript2"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "leads-input",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -64,
+        656
+      ],
+      "id": "9f9a3ac1-af82-41a1-8176-a7172585c287",
+      "name": "Webhook",
+      "webhookId": "aa574e4d-3c1c-4bab-82c7-922d61cf55d1"
+    },
+    {
+      "parameters": {
+        "jsCode": "const itemsArr = items.map(i => i.json);\n\nreturn [{\n  json: {\n    total_leads: itemsArr.length,\n    avg_score: itemsArr.reduce((a,b)=>a + (b.lead_score || 0), 0) / itemsArr.length\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        320,
+        672
+      ],
+      "id": "358947e2-c58c-4d3e-bca9-febc312965b8",
+      "name": "Code in JavaScript3"
+    },
+    {
+      "parameters": {
+        "sendTo": "ahmedfaheen546@gmail.com",
+        "subject": "Lead Report",
+        "message": "=Total Leads: {{$json[\"total_leads\"]}}  Average Score: {{$json[\"avg_score\"]}}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        720,
+        672
+      ],
+      "id": "4cf29c10-9e10-4dfe-a3ae-b2138fe8ce5b",
+      "name": "Send a message",
+      "webhookId": "f40a986f-0cff-4c8c-a30f-2012154ac954",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "BRDsUzoeaO6igCiX",
+          "name": "Gmail OAuth2 API"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Get row(s) in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "If1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Groq Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If1": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Basic LLM Chain": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript1": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript2": {
+      "main": [
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append row in sheet2": {
+      "main": [
+        []
+      ]
+    },
+    "Code in JavaScript3": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "af772924-b149-4c23-ae30-37a23d58bead",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "7a89fe3df3132f1b499d5f423fa4c0e8cb8b96a1e4c94dd1f608e6823e41884f"
+  },
+  "id": "yGMMM90BkzynE6CV",
+  "tags": []
+}
