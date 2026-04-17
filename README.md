@@ -58,7 +58,7 @@ This project is an AI-powered lead processing workflow built using **n8n**. It a
 
 ## 📸 Workflow Architecture
 
-AI Lead Intelligence Pipeline.png---
+AI Lead Intelligence Pipeline.png
 
 ## 🚀 How to Use
 
