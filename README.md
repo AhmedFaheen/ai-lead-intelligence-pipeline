@@ -1,134 +1,81 @@
-# AI Lead Intelligence Pipeline
+# 🚀 AI Lead Intelligence Pipeline
 
-## Overview
-This project processes lead data using n8n workflows. It includes:
-- Webhook-based lead intake
-- Automated email reporting
-- Data analysis workflow
+## 📌 Overview
+
+This project is an AI-powered lead processing workflow built using **n8n**. It automates lead validation, deduplication, enrichment, scoring, and outreach insight generation.
 
 ---
 
-## Setup Instructions
+## 🎯 Features
 
-### 1. Import Workflows
-- Open n8n
-- Import JSON files:
-  - webhook_email_workflow.json
-  - analysis_workflow.json
-
----
-
-### 2. Configure Credentials
-- Add Gmail OAuth2 credentials
-- Connect Google Sheets (if used)
+* Multi-source lead ingestion (Google Sheets + Webhook)
+* Data validation (missing fields handling)
+* Duplicate detection
+* Website data enrichment via HTTP requests
+* AI-powered lead scoring (Groq LLM)
+* Outreach insight generation
+* Automated report generation
 
 ---
 
-### 3. Run Webhook Workflow
-- Click "Listen for Test Event"
-- Send POST request using Hoppscotch
+## 🛠️ Tech Stack
 
-Example:
-{
-  "company": "Test AI",
-  "lead_score": 50
-}
+* n8n (workflow automation)
+* Google Sheets
+* JavaScript (data processing)
+* HTTP APIs
+* Groq LLM (AI insights)
 
 ---
 
-### 4. Expected Output
-- Email report is sent
-- Data processed successfully
+## 🔄 Workflow Steps
+
+1. Ingest leads from Sheets/Webhook
+2. Validate data (missing fields)
+3. Detect duplicates
+4. Enrich data via website scraping/API
+5. Use AI to score leads
+6. Generate outreach insights
+7. Store results in categorized sheets
 
 ---
 
-## Technologies Used
-- n8n
-- Google Sheets
-- Gmail API
-- Hoppscotch
+## 📊 Output Sheets
 
-📊 ✅ 4. Sample Dataset
+* ❌ Invalid Leads
+* ⚠️ Duplicate Leads
+* ✅ Final Enriched Leads
 
-Create a file: sample_data.json
+---
 
-[
-  { "company": "OpenAI", "lead_score": 80 },
-  { "company": "Google", "lead_score": 90 },
-  { "company": "StartupX", "lead_score": 60 }
-]
-📸 ✅ 5. Evidence of Successful Runs
+## 🧠 Sample AI Output
 
-Include screenshots of:
+* Lead Score: High / Medium / Low
+* Company Summary
+* Suggested Outreach Strategy
 
-✅ Webhook success (200 OK)
-✅ Gmail sent message
-✅ n8n execution green path
+---
 
-👉 Name files:
+## 📸 Workflow Architecture
 
-success_webhook.png
-success_email.png
-workflow_execution.png
-❌ ✅ 6. Failure Test Examples
+AI Lead Intelligence Pipeline.png
+---
 
-Show wrong inputs:
+## 🚀 How to Use
 
-Example 1:
-{ "company": "", "lead_score": null }
-Example 2:
-{ "company": "Test" }
+1. Import the workflow JSON into n8n
+2. Connect Google Sheets
+3. Configure API keys if needed
+4. Run workflow
 
-👉 Capture:
+---
 
-Error handling OR incorrect output
-📁 ✅ 7. Output Dataset
+## 💡 Use Case
 
-If using Sheets or output JSON:
+Helps sales teams automate lead qualification and outreach preparation.
 
-[
-  {
-    "company": "OpenAI",
-    "lead_score": 80,
-    "total_leads": 1,
-    "avg_score": 80
-  }
-]
-📧 ✅ 8. Generated Report (Email)
+---
 
-Example:
+## 👤 Author
 
-Subject: Lead Report
-
-New Lead Received:
-
-Company: OpenAI
-Lead Score: 80
-
-Total Leads: 1
-Average Score: 80
-
-👉 Include screenshot of email
-
-🏁 Final Folder Structure
-project/
-│
-├── workflows/
-│   ├── webhook_email_workflow.json
-│   ├── analysis_workflow.json
-│
-├── docs/
-│   ├── architecture.png
-│   ├── README.md
-│
-├── data/
-│   ├── sample_data.json
-│   ├── output_data.json
-│
-├── screenshots/
-│   ├── success_webhook.png
-│   ├── success_email.png
-│   ├── failure_test.png
-│
-└── report/
-    └── email_output.png
+Nalgar Ahmed Faheen
